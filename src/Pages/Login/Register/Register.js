@@ -1,7 +1,7 @@
 
 import { Button, CircularProgress, Container, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useHistory,useLocation } from 'react-router-dom';
 import useAuth from '../../../Hooks/useAuth';
 import login from '../../../images/login.png';
 import Alert from '@mui/material/Alert';
@@ -10,8 +10,10 @@ import Alert from '@mui/material/Alert';
 const Register = () => {
     const [loginData,setLoginData]=useState({});
     const {user,registerUser,isLoading,authError}=useAuth();
+    const history=useHistory();
+    const location=useLocation();
 
-    const handleOnChange=e=>{
+    const handleOnBlur=e=>{
         const field=e.target.name;
         const value=e.target.value;
         const newLoginData={...loginData};
@@ -27,7 +29,7 @@ const Register = () => {
             alert('Your Password is did not Match')
             return
         }
-        registerUser(loginData.email, loginData.password) 
+        registerUser(loginData.email, loginData.password,history,loginData.name) 
         e.preventDefault();
     }
     return (
@@ -41,10 +43,17 @@ const Register = () => {
       <TextField
        id="standard-basic" 
        sx={{width:'75%',m:1}}
+       label="Your Name" 
+       name='name'
+       onBlur={handleOnBlur}
+       variant="standard" />
+      <TextField
+       id="standard-basic" 
+       sx={{width:'75%',m:1}}
        label="Your Email" 
        name='email'
        type="email"
-       onChange={handleOnChange}
+       onBlur={handleOnBlur}
        variant="standard" />
       <TextField
        id="standard-basic" 
@@ -52,7 +61,7 @@ const Register = () => {
        label="Your Password" 
        type="password"
        name='password'
-       onChange={handleOnChange}
+       onBlur={handleOnBlur}
        variant="standard" />
       <TextField
        id="standard-basic" 
@@ -60,7 +69,7 @@ const Register = () => {
        label="Confirm Your Password" 
        type="password"
        name='password2'
-       onChange={handleOnChange}
+       onBlur={handleOnBlur}
        variant="standard" />
 
        <NavLink to="/login"><Button variant="text">Already Register? Please Login</Button> </NavLink>
